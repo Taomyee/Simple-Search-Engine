@@ -1,0 +1,123 @@
+Task 1.1
+
+diff token_test_tokenized_ok.txt tokenized_result.txt --strip-trailing-cr
+
+
+Task 1.5
+Precision = (number of relevant documents retrieved) / (total number of documents retrieved)
+          = 15 / 22 = 0.68
+Recall = (number of relevant documents retrieved) / (total number of relevant documents)
+       = 15 / 100 = 0.15
+
+Difficult cases:
+1) 5 Economics.f, 15 Statistics.f
+They are not mathematics major but highly related to mathematics. There are many related courses to Mathematics.
+But compared to mathematics.f, there are many unrelated courses‘ introduction.
+
+2) 4 ECE_Course_Reviews.f
+There are some courses related to mathematics, but I cannot find whether it's about "graduate".
+
+3) 17 UCD_Honors_and_Prizes.f
+It's a prize for students. I am not sure whether honor is related to the program.
+
+
+Task 1.6
+graduate mathematics course UC Davis: 12 matches
+
+add "course" into the keywords because it can filter some files unrelated to the courses.
+
+1 Computer_Science.f 2
+1 ECE_Course_Reviews.f 1
+1 Economics.f 3
+1 Hydrology.f 1
+1 Mathematics.f 3
+1 MattHh.f 0
+1 Private_Tutoring.f 0
+1 Statistics.f 3
+1 Teaching_Assistants.f 2
+1 UCD_Honors_and_Prizes.f 1
+1 UC_Davis_English_Department.f 0
+1 What_I_Wish_I_Knew...Before_Coming_to_UC_Davis_Entomology.f 2
+
+precision = 9/12 = 0.75
+recall = 9/100 = 0.09
+
+Why can we not simply set the query to be the entire information need description?
+Because the result files must contain all the entire information. If too many keywords are set, there mat be very few results returned.
+
+2.3
+Q: reason about the effects of different variations of cosine similarity and TF-IDF for the query food residence.
+Euclidean distance tends to give more weight to the larger dimensions of a vector, while Manhattan distance treats all dimensions equally.
+If the query coordinates are considered to be (1,1), no longer affected by query length
+
+2.4
+duplicated: Elaine_Kasimatis.f  Evelyn_Silvia.f
+
+Difficult cases:
+#redirect: original file or redirected file?
+1) GradLink.f 1
+It's said about Division of Graduate Studies. It' not directly related to mathematics but the goal of the newsletter may include mathematics students.
+
+2) Society_for_Industrial_and_Applied_Mathematics.f 3
+It's not related to program but club for graduate students. But I think it is highly corresponding to the "mathematics".
+
+3) SIAM.f 1
+It introduces the meanings of SIAM in Davis. Although it's not about graduate program, it may be useful for graduate students to learn about this mathematics concept.
+
+Precision (Recall) for the intersection queries > Precision (Recall) for the ranked queries.
+Trend: At the top of rank, the result got from ranked queries has a low relevance. But then there are more relevant files as the document length becomes longer.
+Because tfidf tends to rank short documents higher.
+tf_idf = tf * idf / len(doc)
+
+
+2.5
+javac pagerank/PageRank.java
+java -Xmx1g pagerank/PageRank pagerank/linksDavis.txt
+Q1: Look up the titles of some documents with high rank, and some documents with low rank. Does the ranking make sense.
+Rank #1: 245 -> 1190 in-links
+Rank #30: 484 -> 141 in-links
+Thus the ranking makes sense.
+
+Q2: What is the effect of letting the tf_idf score dominate this ranking? What is the effect of letting the pagerank dominate? What would be a good strategy for selecting an "optimal" combination?
+if tf_idf dominates the ranking: the content of the documents (term frequency and document frequency)
+if pagerank dominates the ranking: the authority of the page
+
+3.1
+1. What happens to the two documents that you selected?
+Each token present in the documents will be enumerated and assigned weights in the new query.
+
+2. What are the characteristics of the other documents in the new top ten list - what are they about? Are there any new ones that were not among the top ten before?
+
+The new top 10 are more related to the selected documents.
+There are new documents, containing content more closely related to the selected document than the original query.
+
+3. Try different values for the weights α and β: How is the relevance feedback process affected by α and β?
+
+Higher α, more emphasis on the original query
+Higher β, more emphasis on the new query related to the selected documents.
+
+4. Why is the search after feedback slower? Why is the number of returned documents larger?
+The search after feedback is slower because the expanded query includes all the tokens from the selected documents, resulting in a larger and more complex query.
+This increased query size leads to a larger number of documents being returned as potential matches, expanding the search results set.
+
+3.2
+1. Why do we want to omit that document? (Mathematics.f)
+Because that's the document that query feedback was executed with. It will introduce a large bias.
+
+2. Compare your result in 1 and 3 above. What do you see?
+
+Before relevance feedback: 0.5191684089303495
+After relevance feedback: 0.24881023518419573
+
+nDCG decreases ...
+
+
+
+
+
+
+
+
+
+
+
